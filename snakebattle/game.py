@@ -1,6 +1,7 @@
 import pygame
 
 from .config import BACKGROUND,COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS
+from .snake import Player1, Player2
 
 class Game:
     def __init__(self, win):
@@ -8,11 +9,12 @@ class Game:
         self.game_over = False
         self.player1 = None
         self.player2 = None
-        # self.init_players()
+        self.init_players()
 
     def update(self):
         self.win.blit(BACKGROUND, (0, 0))
         self.draw_game()
+        self.draw_snake(self.player1)
        # self.winner()
         pygame.display.update()
 
@@ -25,35 +27,48 @@ class Game:
         for i in range(ROWS):
             y = y + SQ_SIZE
             pygame.draw.line(self.win, COLORS['WHITE'], (0, y), (WIDTH, y))
-
-
         # p1_score = FONT_HEALTH.render(f"P1 Health: {self.player1.health}", 1, COLORS['GREEN'])
         # p2_score = FONT_HEALTH.render(f"P2 Health: {self.player2.health}", 1, COLORS['YELLOW'])
 
+    def draw_snake(self, snake):
+        for i, cube in enumerate(snake.body):
+            if i == 0:
+                pygame.draw.rect(self.win, snake.color, (cube.x*SQ_SIZE+1, cube.y*SQ_SIZE+1, SQ_SIZE-2, SQ_SIZE-2))
+                # draws the head of the snake
+                center = SQ_SIZE//2
+                radius = 3
+                eye1 = (cube.x*SQ_SIZE+center-radius, cube.y*SQ_SIZE+8)
+                eye2 = (cube.x*SQ_SIZE+SQ_SIZE-radius*2, cube.y*SQ_SIZE+8)
+                pygame.draw.circle(self.win, COLORS['BLACK'], eye1, radius)
+                pygame.draw.circle(self.win, COLORS['BLACK'], eye2, radius)
+            else:
+                pygame.draw.rect(self.win, snake.color, (cube.x*SQ_SIZE+1, cube.y*SQ_SIZE+1, SQ_SIZE-2, SQ_SIZE-2))
+
     def init_players(self):
-        self.player1 = Player1(200, 250)
-        self.player2 = Player2(800, 250)
+        self.player1 = Player1()
+        # self.player2 = Player2(800, 250)
 
     def move(self, keys_pressed):
         if keys_pressed[pygame.K_LEFT]:  # P1 left
             self.player1.dirx = -1
             self.player1.diry = 0
-            self.player1.turns[self.player1.head.pos[:]] = [self.player1.dirx, self.player1.diry]
+            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
 
         elif keys_pressed[pygame.K_UP]:  # P1 up
             self.player1.dirx = 0
             self.player1.diry = -1
-            self.player1.turns[self.player1.head.pos[:]] = [self.player1.dirx, self.player1.diry]
+            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
 
         elif keys_pressed[pygame.K_RIGHT]:  # P1 right
             self.player1.dirx = 1
             self.player1.diry = 0
-            self.player1.turns[self.player1.head.pos[:]] = [self.player1.dirx, self.player1.diry]
+            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
 
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
             self.player1.dirx = 0
             self.player1.diry = -1
-            self.player1.turns[self.player1.head.pos[:]] = [self.player1.dirx, self.player1.diry]
+            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
+        self.player1.move_snake()
 
 
     def shoot(self, player):

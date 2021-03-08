@@ -24,15 +24,14 @@ def run(game):
                 break
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LCTRL:
-                    pass
+                game.move(keys_pressed)
 
         keys_pressed = pygame.key.get_pressed()
         game.move(keys_pressed)
-
         game.update()
+
         if game.game_over:
-            pygame.time.delay(5000)
+            pygame.time.delay(1000)
             break
 
     main()
