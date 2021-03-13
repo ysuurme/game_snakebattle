@@ -22,6 +22,9 @@ class Snake:
                 if i == len(self.moves):
                     self.moves.pop(i + 1)
 
+    def eat_snack(self, snack):
+        self.body.append(Cube(snack.x, snack.y, self.color))
+
 
 class Player1(Snake):
     def __init__(self):

@@ -21,6 +21,7 @@ class Game:
         self.draw_game()
         self.draw_snake(self.player1)
         self.draw_snack()
+        self.handle_snack()
         # self.winner()
         pygame.display.update()
 
@@ -73,29 +74,6 @@ class Game:
 
         self.player1.move_snake()  # move snake
 
-    def shoot(self, player):
-        if player.ammo >= 0:
-            player.ammo -= 1
-            bullet = Bullet(player)  # Create bullet
-            SOUND_BLT_FIRE.play()
-            self.bullets.append(bullet)
-        else:
-            print(f'Player: {type(player).__name__} is out of ammo!')
-
-    def handle_bullets(self):
-        for b in self.bullets:
-            b.shape.move_ip(b.BLT_SPEED, 0)
-            if self.player1.hull.colliderect(b.shape):
-                pygame.event.post(pygame.event.Event(P1_HIT))
-                self.bullets.remove(b)
-            elif self.player2.hull.colliderect(b.shape):
-                pygame.event.post(pygame.event.Event(P2_HIT))
-                self.bullets.remove(b)
-            elif b.x < 0:
-                self.bullets.remove(b)
-            elif b.x > WIDTH:
-                self.bullets.remove(b)
-
     def init_snack(self):
         for cube in self.player1.body:
             while True:
@@ -107,7 +85,10 @@ class Game:
                     break
         self.snack = Snack(x, y)
 
-
+    def handle_snack(self):
+        if self.player1.head.x == self.snack.x and self.player1.head.y == self.snack.y:
+            self.player1.eat_snack(self.snack)
+            self.init_snack()
 
     def reload(self):  # todo limit bullet spamming
         if self.player1.ammo < MAX_BLTS:
