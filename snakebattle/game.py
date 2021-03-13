@@ -88,7 +88,7 @@ class Game:
     def handle_snack(self):
         if self.player1.head.x == self.snack.x and self.player1.head.y == self.snack.y:
             self.player1.eat_snack(self.snack)
-            self.init_snack()
+            self.init_snack()  # todo when eating snack, append move with direction for snack
 
     def reload(self):  # todo limit bullet spamming
         if self.player1.ammo < MAX_BLTS:

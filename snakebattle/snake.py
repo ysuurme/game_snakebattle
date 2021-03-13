@@ -8,6 +8,8 @@ class Snake:
 
     def move_snake(self):
         for i, cube in enumerate(self.body):
+            while len(self.moves) > len(self.body):
+                self.moves.pop()
             if cube.x == 0 and self.moves[i][0] == -1:  # snake moves from column 0 to left, enter game right
                 cube.x = COLS - 1
             elif cube.x == COLS - 1 and self.moves[i][0] == 1:  # snake moves from max column to right, enter game left
@@ -19,8 +21,6 @@ class Snake:
             else:
                 cube.x += self.moves[i][0]
                 cube.y += self.moves[i][1]
-                if i == len(self.moves):
-                    self.moves.pop(i + 1)
 
     def eat_snack(self, snack):
         self.body.append(Cube(snack.x, snack.y, self.color))
