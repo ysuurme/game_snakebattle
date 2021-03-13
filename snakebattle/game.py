@@ -1,7 +1,9 @@
 import pygame
+import random
 
 from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS
 from .snake import Player1, Player2
+from .snack import Snack
 
 
 class Game:
@@ -10,12 +12,15 @@ class Game:
         self.game_over = False
         self.player1 = None
         self.player2 = None
+        self.snack = None
         self.init_players()
+        self.init_snack()
 
     def update(self):
         self.win.blit(BACKGROUND, (0, 0))
         self.draw_game()
         self.draw_snake(self.player1)
+        self.draw_snack()
         # self.winner()
         pygame.display.update()
 
@@ -33,16 +38,19 @@ class Game:
 
     def draw_snake(self, snake):
         for i, cube in enumerate(snake.body):
-            if i == 0:
-                snake.head = cube  # draws the head of the snake
+            pygame.draw.rect(self.win, snake.color,
+                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
+            if i == 0:  # draws the head of the snake
                 center = SQ_SIZE // 2
                 radius = 3
                 eye1 = (snake.head.x * SQ_SIZE + center - radius, snake.head.y * SQ_SIZE + 8)
                 eye2 = (snake.head.x * SQ_SIZE + SQ_SIZE - radius * 2, snake.head.y * SQ_SIZE + 8)
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye1, radius)
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye2, radius)
-            pygame.draw.rect(self.win, snake.color,
-                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
+
+    def draw_snack(self):
+        pygame.draw.rect(self.win, self.snack.color, (self.snack.x * SQ_SIZE + 1, self.snack.y * SQ_SIZE + 1,
+                                                      SQ_SIZE - 2, SQ_SIZE - 2))
 
     def init_players(self):
         self.player1 = Player1()
@@ -88,15 +96,18 @@ class Game:
             elif b.x > WIDTH:
                 self.bullets.remove(b)
 
-    def draw_bullets(self):
-        for b in self.bullets:
-            if b.player == 'Player1':
-                color = COLORS['GREEN']
-            elif b.player == 'Player2':
-                color = COLORS['YELLOW']
-            else:
-                color = COLORS['WHITE']
-            pygame.draw.rect(self.win, color, b.shape)
+    def init_snack(self):
+        for cube in self.player1.body:
+            while True:
+                x = random.randrange(COLS)
+                y = random.randrange(ROWS)
+                if cube.x == x and cube.y == y:  # validates if snack is not in snake body
+                    continue  # define new x, y for snack
+                else:
+                    break
+        self.snack = Snack(x, y)
+
+
 
     def reload(self):  # todo limit bullet spamming
         if self.player1.ammo < MAX_BLTS:

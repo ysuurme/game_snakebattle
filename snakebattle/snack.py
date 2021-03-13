@@ -1,7 +1,8 @@
-from snakebattle.config import COLORS
+from .config import COLORS
+
 
 class Snack:
-    def __init__(self, x, y):
-        if type(player).__name__ == 'Player1':
-
-        self.color = COLORS['RED']
+    def __init__(self, x, y, color=COLORS['WHITE']):
+        self.x = x  # x position in the game 'grid'
+        self.y = y  # y position in the game 'grid'
+        self.color = color
