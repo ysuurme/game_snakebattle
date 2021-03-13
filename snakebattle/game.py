@@ -1,7 +1,8 @@
 import pygame
 
-from .config import BACKGROUND,COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS
+from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS
 from .snake import Player1, Player2
+
 
 class Game:
     def __init__(self, win):
@@ -15,7 +16,7 @@ class Game:
         self.win.blit(BACKGROUND, (0, 0))
         self.draw_game()
         self.draw_snake(self.player1)
-       # self.winner()
+        # self.winner()
         pygame.display.update()
 
     def draw_game(self):
@@ -33,43 +34,36 @@ class Game:
     def draw_snake(self, snake):
         for i, cube in enumerate(snake.body):
             if i == 0:
-                pygame.draw.rect(self.win, snake.color, (cube.x*SQ_SIZE+1, cube.y*SQ_SIZE+1, SQ_SIZE-2, SQ_SIZE-2))
-                # draws the head of the snake
-                center = SQ_SIZE//2
+                snake.head = cube  # draws the head of the snake
+                center = SQ_SIZE // 2
                 radius = 3
-                eye1 = (cube.x*SQ_SIZE+center-radius, cube.y*SQ_SIZE+8)
-                eye2 = (cube.x*SQ_SIZE+SQ_SIZE-radius*2, cube.y*SQ_SIZE+8)
+                eye1 = (snake.head.x * SQ_SIZE + center - radius, snake.head.y * SQ_SIZE + 8)
+                eye2 = (snake.head.x * SQ_SIZE + SQ_SIZE - radius * 2, snake.head.y * SQ_SIZE + 8)
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye1, radius)
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye2, radius)
-            else:
-                pygame.draw.rect(self.win, snake.color, (cube.x*SQ_SIZE+1, cube.y*SQ_SIZE+1, SQ_SIZE-2, SQ_SIZE-2))
+            pygame.draw.rect(self.win, snake.color,
+                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
 
     def init_players(self):
         self.player1 = Player1()
         # self.player2 = Player2(800, 250)
 
     def move(self, keys_pressed):
-        if keys_pressed[pygame.K_LEFT]:  # P1 left
-            self.player1.dirx = -1
-            self.player1.diry = 0
-            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
+        if keys_pressed[pygame.K_ESCAPE]:  # Quit game
+            pygame.event.post(pygame.event.Event(QUIT))
+        elif keys_pressed[pygame.K_LEFT]:  # P1 left
+            self.player1.moves.insert(0, (-1, 0))
 
         elif keys_pressed[pygame.K_UP]:  # P1 up
-            self.player1.dirx = 0
-            self.player1.diry = -1
-            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
+            self.player1.moves.insert(0, (0, -1))
 
         elif keys_pressed[pygame.K_RIGHT]:  # P1 right
-            self.player1.dirx = 1
-            self.player1.diry = 0
-            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
+            self.player1.moves.insert(0, (1, 0))
 
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
-            self.player1.dirx = 0
-            self.player1.diry = -1
-            self.player1.turns[self.player1.head.x, self.player1.head.y] = [self.player1.dirx, self.player1.diry]
-        self.player1.move_snake()
+            self.player1.moves.insert(0, (0, 1))
 
+        self.player1.move_snake()  # move snake
 
     def shoot(self, player):
         if player.ammo >= 0:
@@ -123,10 +117,5 @@ class Game:
             winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, COLORS['GREEN'])
             self.game_over = True
         if self.game_over:
-            self.win.blit(winner_text, (WIDTH/2 - winner_text.get_width()/2, HEIGHT/2 - winner_text.get_height()/2))
-
-
-
-
-
-
+            self.win.blit(winner_text,
+                          (WIDTH / 2 - winner_text.get_width() / 2, HEIGHT / 2 - winner_text.get_height() / 2))

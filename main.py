@@ -1,5 +1,5 @@
 import pygame
-from snakebattle.config import WIDTH, HEIGHT, DELAY, FPS
+from snakebattle.config import QUIT, WIDTH, HEIGHT, DELAY, FPS
 from snakebattle.game import Game
 
 
@@ -18,16 +18,14 @@ def run(game):
         clock.tick(FPS)
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or event.type == QUIT:
                 run_game = False
                 pygame.quit()
                 break
 
-            if event.type == pygame.KEYDOWN:
-                game.move(keys_pressed)
-
         keys_pressed = pygame.key.get_pressed()
         game.move(keys_pressed)
+
         game.update()
 
         if game.game_over:
