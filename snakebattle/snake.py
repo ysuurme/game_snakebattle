@@ -17,13 +17,14 @@ class Snake:
             elif cube.y == 0 and self.moves[i][1] == -1:  # snake moves from top row to above, enter game last row
                 cube.y = ROWS - 1
             elif cube.y == ROWS - 1 and self.moves[i][1] == 1:  # snake moves from last row down, enter game top row
-                cube.y = 1
+                cube.y = 0
             else:
                 cube.x += self.moves[i][0]
                 cube.y += self.moves[i][1]
 
     def eat_snack(self, snack):
         self.body.append(Cube(snack.x, snack.y, self.color))
+        self.moves.append((0, 0)  # todo new cube needs to be next move, currently appended as 3rd when 2 cubes
 
 
 class Player1(Snake):

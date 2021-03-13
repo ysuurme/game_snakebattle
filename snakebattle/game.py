@@ -71,6 +71,8 @@ class Game:
 
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
             self.player1.moves.insert(0, (0, 1))
+        else:
+            self.player1.moves.insert(0, self.player1.moves[0])
 
         self.player1.move_snake()  # move snake
 
