@@ -23,9 +23,6 @@ def run(game):
                 pygame.quit()
                 break
 
-        keys_pressed = pygame.key.get_pressed()
-        game.move(keys_pressed)
-
         game.update()
 
         if game.game_over:

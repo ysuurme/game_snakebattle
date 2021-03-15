@@ -19,11 +19,16 @@ class Game:
     def update(self):
         self.win.blit(BACKGROUND, (0, 0))
         self.draw_game()
-        self.draw_snake(self.player1)
         self.draw_snack()
+        self.draw_snake(self.player1)
+        self.move_snake()
         self.handle_snack()
         # self.winner()
         pygame.display.update()
+
+    def init_players(self):
+        self.player1 = Player1()
+        # self.player2 = Player2(800, 250)
 
     def draw_game(self):
         x = 0
@@ -53,28 +58,21 @@ class Game:
         pygame.draw.rect(self.win, self.snack.color, (self.snack.x * SQ_SIZE + 1, self.snack.y * SQ_SIZE + 1,
                                                       SQ_SIZE - 2, SQ_SIZE - 2))
 
-    def init_players(self):
-        self.player1 = Player1()
-        # self.player2 = Player2(800, 250)
-
-    def move(self, keys_pressed):
+    def move_snake(self):
+        keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_ESCAPE]:  # Quit game
             pygame.event.post(pygame.event.Event(QUIT))
+
         elif keys_pressed[pygame.K_LEFT]:  # P1 left
-            self.player1.moves.insert(0, (-1, 0))
-
+            self.player1.dir = (-1, 0)
         elif keys_pressed[pygame.K_UP]:  # P1 up
-            self.player1.moves.insert(0, (0, -1))
-
+            self.player1.dir = (0, -1)
         elif keys_pressed[pygame.K_RIGHT]:  # P1 right
-            self.player1.moves.insert(0, (1, 0))
-
+            self.player1.dir = (1, 0)
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
-            self.player1.moves.insert(0, (0, 1))
-        else:
-            self.player1.moves.insert(0, self.player1.moves[0])
+            self.player1.dir = (0, 1)
 
-        self.player1.move_snake()  # move snake
+        self.player1.move_snake_body()  # move snake
 
     def init_snack(self):
         for cube in self.player1.body:
@@ -89,8 +87,8 @@ class Game:
 
     def handle_snack(self):
         if self.player1.head.x == self.snack.x and self.player1.head.y == self.snack.y:
-            self.player1.eat_snack(self.snack)
-            self.init_snack()  # todo when eating snack, append move with direction for snack
+            self.player1.length += 1
+            self.init_snack()
 
     def reload(self):  # todo limit bullet spamming
         if self.player1.ammo < MAX_BLTS:
