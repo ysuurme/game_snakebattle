@@ -38,7 +38,7 @@ class Player1(Snake):
         super().__init__()
         self.color = COLORS['BLUE']
         self.head = Cube(10, 10)
-        self.body.insert(0, self.head)
+        self.body.append(self.head)
 
 
 class Player2(Snake):

@@ -46,17 +46,20 @@ class Game:
         self.win.blit(p2_score, (WIDTH - p2_score.get_width() - 10, 10))
 
     def draw_snake(self, snake):
+
         for i, cube in enumerate(snake.body):
-            pygame.draw.rect(self.win, snake.color,
-                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
-            if i == 0:  # draws the head of the snake
-                # self.win.blit(self.player1.spaceship, (self.player1.hull.x, self.player1.hull.y))
+            if i == 0:
+                pygame.draw.rect(self.win, snake.color,
+                                 (snake.head.x * SQ_SIZE + 1, snake.head.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
                 center = SQ_SIZE // 2
                 radius = 3
                 eye1 = (snake.head.x * SQ_SIZE + center - radius, snake.head.y * SQ_SIZE + 8)
                 eye2 = (snake.head.x * SQ_SIZE + SQ_SIZE - radius * 2, snake.head.y * SQ_SIZE + 8)
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye1, radius)
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye2, radius)
+            else:
+                pygame.draw.rect(self.win, snake.color,
+                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
 
     def draw_snack(self):
         pygame.draw.rect(self.win, self.snack.color, (self.snack.x * SQ_SIZE + 1, self.snack.y * SQ_SIZE + 1,
@@ -88,7 +91,7 @@ class Game:
         self.player1.move_snake_body()  # P1 move snake
         self.player2.move_snake_body()  # P2 move snake
 
-    def init_snack(self) -> object:
+    def init_snack(self):
         for cube in self.player1.body:
             while True:
                 x = random.randrange(COLS)
