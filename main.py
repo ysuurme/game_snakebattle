@@ -1,4 +1,6 @@
 import pygame
+import sys
+
 from snakebattle.config import QUIT, WIDTH, HEIGHT, DELAY, FPS
 from snakebattle.game import Game
 
@@ -11,17 +13,15 @@ def init_game():
 
 
 def run(game):
-    run_game = True
     clock = pygame.time.Clock()
-    while run_game:
+    while True:
         pygame.time.delay(DELAY)
         clock.tick(FPS)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == QUIT:
-                run_game = False
                 pygame.quit()
-                break
+                sys.exit()
 
         game.update()
 
