@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS
+from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS, FONT_SCORE, FONT_WINNER
 from .snake import Player1, Player2
 from .snack import Snack
 
@@ -21,14 +21,15 @@ class Game:
         self.draw_game()
         self.draw_snack()
         self.draw_snake(self.player1)
+        self.draw_snake(self.player2)
         self.move_snake()
         self.handle_snack()
-        # self.winner()
+        self.winner()
         pygame.display.update()
 
     def init_players(self):
         self.player1 = Player1()
-        # self.player2 = Player2(800, 250)
+        self.player2 = Player2()
 
     def draw_game(self):
         x = 0
@@ -39,14 +40,17 @@ class Game:
         for i in range(ROWS):
             y = y + SQ_SIZE
             pygame.draw.line(self.win, COLORS['WHITE'], (0, y), (WIDTH, y))
-        # p1_score = FONT_HEALTH.render(f"P1 Health: {self.player1.health}", 1, COLORS['GREEN'])
-        # p2_score = FONT_HEALTH.render(f"P2 Health: {self.player2.health}", 1, COLORS['YELLOW'])
+        p1_score = FONT_SCORE.render(f"P1 Score: {self.player1.length}", 1, self.player1.color)
+        p2_score = FONT_SCORE.render(f"P2 Score: {self.player2.length}", 1, self.player2.color)
+        self.win.blit(p1_score, (10, 10))
+        self.win.blit(p2_score, (WIDTH - p2_score.get_width() - 10, 10))
 
     def draw_snake(self, snake):
         for i, cube in enumerate(snake.body):
             pygame.draw.rect(self.win, snake.color,
                              (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
             if i == 0:  # draws the head of the snake
+                # self.win.blit(self.player1.spaceship, (self.player1.hull.x, self.player1.hull.y))
                 center = SQ_SIZE // 2
                 radius = 3
                 eye1 = (snake.head.x * SQ_SIZE + center - radius, snake.head.y * SQ_SIZE + 8)
@@ -90,24 +94,19 @@ class Game:
             self.player1.length += 1
             self.init_snack()
 
-    def reload(self):  # todo limit bullet spamming
-        if self.player1.ammo < MAX_BLTS:
-            self.player1.ammo += 1
-        if self.player2.ammo < MAX_BLTS:
-            self.player2.ammo += 1
-
     def blit_spaceships(self):
-        self.win.blit(self.player1.spaceship, (self.player1.hull.x, self.player1.hull.y))
+
         self.win.blit(self.player2.spaceship, (self.player2.hull.x, self.player2.hull.y))
 
     def winner(self):
         winner_text = ""
-        if self.player1.health <= 0:
-            winner_text = FONT_WINNER.render("Player 2 has won the game!", 1, COLORS['YELLOW'])
+        if self.player1.head in self.player2.body:
+            winner_text = FONT_WINNER.render("Player 1 has lost the game!", 1, COLORS['YELLOW'])
             self.game_over = True
-        elif self.player2.health <= 0:
-            winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, COLORS['GREEN'])
+        elif self.player1.head in self.player2.body:
+            winner_text = FONT_WINNER.render("Player 2 has lost the game!", 1, COLORS['GREEN'])
             self.game_over = True
+
         if self.game_over:
             self.win.blit(winner_text,
                           (WIDTH / 2 - winner_text.get_width() / 2, HEIGHT / 2 - winner_text.get_height() / 2))
