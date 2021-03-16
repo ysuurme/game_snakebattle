@@ -76,9 +76,19 @@ class Game:
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
             self.player1.dir = (0, 1)
 
-        self.player1.move_snake_body()  # move snake
+        elif keys_pressed[pygame.K_a]:  # P2 left
+            self.player2.dir = (-1, 0)
+        elif keys_pressed[pygame.K_w]:  # P2 up
+            self.player2.dir = (0, -1)
+        elif keys_pressed[pygame.K_d]:  # P2 right
+            self.player2.dir = (1, 0)
+        elif keys_pressed[pygame.K_s]:  # P2 down
+            self.player2.dir = (0, 1)
 
-    def init_snack(self):
+        self.player1.move_snake_body()  # P1 move snake
+        self.player2.move_snake_body()  # P2 move snake
+
+    def init_snack(self) -> object:
         for cube in self.player1.body:
             while True:
                 x = random.randrange(COLS)
@@ -90,8 +100,14 @@ class Game:
         self.snack = Snack(x, y)
 
     def handle_snack(self):
+        munch = False
         if self.player1.head.x == self.snack.x and self.player1.head.y == self.snack.y:
             self.player1.length += 1
+            munch = True
+        elif self.player2.head.x == self.snack.x and self.player2.head.y == self.snack.y:
+            self.player2.length += 1
+            munch = True
+        if munch:
             self.init_snack()
 
     def blit_spaceships(self):
