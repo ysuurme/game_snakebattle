@@ -33,6 +33,7 @@ SHIP_HEIGHT = 60
 SHIP_SPEED = 8
 
 BACKGROUND = pygame.transform.scale(pygame.image.load('assets/snakeBackground.png'), (WIDTH, HEIGHT))
+SNACK = pygame.transform.scale(pygame.image.load('assets/snack.png'), (SQ_SIZE, SQ_SIZE))
 
 BLT_WIDTH = 10
 BLT_HEIGHT = 4

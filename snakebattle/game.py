@@ -62,8 +62,7 @@ class Game:
                              (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
 
     def draw_snack(self):
-        pygame.draw.rect(self.win, self.snack.color, (self.snack.x * SQ_SIZE + 1, self.snack.y * SQ_SIZE + 1,
-                                                      SQ_SIZE - 2, SQ_SIZE - 2))
+        self.win.blit(self.snack.image, (self.snack.x * SQ_SIZE, self.snack.y * SQ_SIZE, SQ_SIZE - 2, SQ_SIZE - 2))
 
     def move_snake(self):
         keys_pressed = pygame.key.get_pressed()
