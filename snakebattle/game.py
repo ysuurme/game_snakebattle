@@ -24,7 +24,6 @@ class Game:
         self.draw_snake(self.player2)
         self.move_snake()
         self.handle_snack()
-        self.winner()
         pygame.display.update()
 
     def init_players(self):
@@ -87,8 +86,10 @@ class Game:
         elif keys_pressed[pygame.K_s]:  # P2 down
             self.player2.dir = (0, 1)
 
-        self.player1.move_snake_body()  # P1 move snake
-        self.player2.move_snake_body()  # P2 move snake
+        if not self.player1.move_snake_body():  # P1 move snake, if can't move P1 hit itself, P2 wins!
+            self.winner(self.player2)
+        elif not self.player2.move_snake_body():  # P2 move snake, if can't move P2 hit itself, P1 wins!
+            self.winner(self.player1)
 
     def init_snack(self):
         for cube in self.player1.body:
@@ -112,17 +113,14 @@ class Game:
         if munch:
             self.init_snack()
 
-    def blit_spaceships(self):
-
-        self.win.blit(self.player2.spaceship, (self.player2.hull.x, self.player2.hull.y))
-
-    def winner(self):
+    def winner(self, winner):
         winner_text = ""
-        if self.player1.head in self.player2.body:
-            winner_text = FONT_WINNER.render("Player 1 has lost the game!", 1, COLORS['YELLOW'])
+
+        if winner == self.player1:
+            winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, self.player1.color)
             self.game_over = True
-        elif self.player1.head in self.player2.body:
-            winner_text = FONT_WINNER.render("Player 2 has lost the game!", 1, COLORS['GREEN'])
+        elif winner == self.player2:
+            winner_text = FONT_WINNER.render("Player 2 has won the game!", 1, self.player2.color)
             self.game_over = True
 
         if self.game_over:

@@ -3,6 +3,7 @@ from snakebattle.config import COLORS, ROWS, COLS
 
 class Snake:
     def __init__(self):
+        self.color = None
         self.head = None
         self.length = 1
         self.body = []
@@ -23,10 +24,15 @@ class Snake:
             x += self.dir[0]
             y += self.dir[1]
 
+        for part in self.body:
+            if self.length > 1 and part.x == x and part.y == y:
+                return False
+
         self.head = Cube(x, y, self.color)
         self.body.insert(0, self.head)
         while len(self.body) > self.length:
             self.body.pop()
+        return True
 
     def eat_snack(self):
         self.head = Cube(self.head.x, self.head.y, self.color)

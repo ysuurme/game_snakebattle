@@ -26,7 +26,7 @@ def run(game):
         game.update()
 
         if game.game_over:
-            pygame.time.delay(1000)
+            pygame.time.delay(5000)
             break
 
     main()
