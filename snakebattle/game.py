@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS, FONT_SCORE, FONT_WINNER
+from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS, FONT_SCORE, FONT_WINNER, SOUND_MUNCH
 from .snake import Player1, Player2
 from .snack import Snack
 
@@ -90,6 +90,7 @@ class Game:
             self.winner(self.player2)
         elif not self.player2.move_snake_body():  # P2 move snake, if can't move P2 hit itself, P1 wins!
             self.winner(self.player1)
+        self.winner()  # Check if a player hits another player
 
     def init_snack(self):
         for cube in self.player1.body:
@@ -111,10 +112,22 @@ class Game:
             self.player2.length += 1
             munch = True
         if munch:
+            SOUND_MUNCH.play()
             self.init_snack()
 
-    def winner(self, winner):
+    def winner(self, winner=None):
         winner_text = ""
+        self.game_over = False
+
+        for part in self.player2.body:  # validate if snake head P1 is not in body P2
+            if self.player1.head.x == part.x and self.player1.head.y == part.y:
+                winner = self.player2
+                self.game_over = True
+
+        for part in self.player1.body:  # validate if snake head P2 is not in body P1
+            if self.player2.head.x == part.x and self.player2.head.y == part.y:
+                winner = self.player1
+                self.game_over = True
 
         if winner == self.player1:
             winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, self.player1.color)

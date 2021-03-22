@@ -43,4 +43,4 @@ MAX_BLTS = 3
 
 QUIT = pygame.USEREVENT + 1
 
-# SOUND_BLT_FIRE = pygame.mixer.Sound('assets/BLT_FIRE.mp3')
+SOUND_MUNCH = pygame.mixer.Sound('assets/snakeMunch.mp3')
