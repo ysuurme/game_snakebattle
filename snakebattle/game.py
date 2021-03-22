@@ -1,7 +1,8 @@
 import pygame
 import random
 
-from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS, FONT_SCORE, FONT_WINNER, SOUND_MUNCH
+from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS, FONT_SCORE, FONT_WINNER,\
+    SOUND_MUNCH, SOUND_HIT
 from .snake import Player1, Player2
 from .snack import Snack
 
@@ -58,7 +59,7 @@ class Game:
                 pygame.draw.circle(self.win, COLORS['BLACK'], eye2, radius)
             else:
                 pygame.draw.rect(self.win, snake.color,
-                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
+                                 (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
 
     def draw_snack(self):
         self.win.blit(self.snack.image, (self.snack.x * SQ_SIZE, self.snack.y * SQ_SIZE, SQ_SIZE - 2, SQ_SIZE - 2))
@@ -68,7 +69,7 @@ class Game:
         if keys_pressed[pygame.K_ESCAPE]:  # Quit game
             pygame.event.post(pygame.event.Event(QUIT))
 
-        elif keys_pressed[pygame.K_LEFT]:  # P1 left
+        if keys_pressed[pygame.K_LEFT]:  # P1 left
             self.player1.dir = (-1, 0)
         elif keys_pressed[pygame.K_UP]:  # P1 up
             self.player1.dir = (0, -1)
@@ -77,7 +78,7 @@ class Game:
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
             self.player1.dir = (0, 1)
 
-        elif keys_pressed[pygame.K_a]:  # P2 left
+        if keys_pressed[pygame.K_a]:  # P2 left
             self.player2.dir = (-1, 0)
         elif keys_pressed[pygame.K_w]:  # P2 up
             self.player2.dir = (0, -1)
@@ -90,9 +91,11 @@ class Game:
             self.winner(self.player2)
         elif not self.player2.move_snake_body():  # P2 move snake, if can't move P2 hit itself, P1 wins!
             self.winner(self.player1)
-        self.winner()  # Check if a player hits another player
+        else:
+            self.winner()  # Check if a player hits another player
 
     def init_snack(self):
+        x, y = 0, 0
         for cube in self.player1.body:
             while True:
                 x = random.randrange(COLS)
@@ -116,26 +119,27 @@ class Game:
             self.init_snack()
 
     def winner(self, winner=None):
-        winner_text = ""
-        self.game_over = False
-
-        for part in self.player2.body:  # validate if snake head P1 is not in body P2
-            if self.player1.head.x == part.x and self.player1.head.y == part.y:
-                winner = self.player2
-                self.game_over = True
-
-        for part in self.player1.body:  # validate if snake head P2 is not in body P1
-            if self.player2.head.x == part.x and self.player2.head.y == part.y:
-                winner = self.player1
-                self.game_over = True
-
+        winner_text = FONT_WINNER.render("Game completed!", 1, COLORS['WHITE'])
         if winner == self.player1:
             winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, self.player1.color)
             self.game_over = True
-        elif winner == self.player2:
+        if winner == self.player2:
             winner_text = FONT_WINNER.render("Player 2 has won the game!", 1, self.player2.color)
             self.game_over = True
 
+        for part in self.player2.body:  # validate if snake head P1 is not in body P2
+            if self.player1.head.x == part.x and self.player1.head.y == part.y:
+                winner_text = FONT_WINNER.render("Player 2 has won the game!", 1, self.player2.color)
+                self.game_over = True
+                break
+
+        for part in self.player1.body:  # validate if snake head P2 is not in body P1
+            if self.player2.head.x == part.x and self.player2.head.y == part.y:
+                winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, self.player1.color)
+                self.game_over = True
+                break
+
         if self.game_over:
+            SOUND_HIT.play()
             self.win.blit(winner_text,
                           (WIDTH / 2 - winner_text.get_width() / 2, HEIGHT / 2 - winner_text.get_height() / 2))

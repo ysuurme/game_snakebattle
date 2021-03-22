@@ -27,20 +27,13 @@ COLORS = {
     "WHITE": (255, 255, 255)
 }
 
-# Game assets
-SHIP_WIDTH = 60
-SHIP_HEIGHT = 60
-SHIP_SPEED = 8
-
+# Game images:
 BACKGROUND = pygame.transform.scale(pygame.image.load('assets/snakeBackground.png'), (WIDTH, HEIGHT))
 SNACK = pygame.transform.scale(pygame.image.load('assets/snack.png'), (SQ_SIZE, SQ_SIZE))
 
-BLT_WIDTH = 10
-BLT_HEIGHT = 4
-BLT_SPEED = 10
-BLT_DAMAGE = 5
-MAX_BLTS = 3
-
-QUIT = pygame.USEREVENT + 1
-
+# Game sounds:
 SOUND_MUNCH = pygame.mixer.Sound('assets/snakeMunch.mp3')
+SOUND_HIT = pygame.mixer.Sound('assets/snakeHit.mp3')
+
+# Game events:
+QUIT = pygame.USEREVENT + 1
