@@ -1,9 +1,9 @@
 # game_snakebattle
-2 snakes 1 game, in this 2 player snake battle the hunt is for a typical Dutch treat "d'n Bossche Bol" 
+2 snakes 1 game, in this 2 player snake battle the hunt is for a typical Dutch treat "d'n Bossche Bol" </br>
 
-Player 1 controls UP, DOWN, LEFT, RIGHT
-Player 2 controls W, S, A, D
-ESC to quit the game
+Player 1 controls UP, DOWN, LEFT, RIGHT </br>
+Player 2 controls W, S, A, D </br>
+ESC to quit the game</br>
 
 Future aim will be to play against an AI with custom difficulty
 
