@@ -48,18 +48,49 @@ class Game:
     def draw_snake(self, snake):
 
         for i, cube in enumerate(snake.body):
-            if i == 0:
-                pygame.draw.rect(self.win, snake.color,
-                                 (snake.head.x * SQ_SIZE + 1, snake.head.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
-                center = SQ_SIZE // 2
-                radius = 3
-                eye1 = (snake.head.x * SQ_SIZE + center - radius, snake.head.y * SQ_SIZE + 8)
-                eye2 = (snake.head.x * SQ_SIZE + SQ_SIZE - radius * 2, snake.head.y * SQ_SIZE + 8)
-                pygame.draw.circle(self.win, COLORS['BLACK'], eye1, radius)
-                pygame.draw.circle(self.win, COLORS['BLACK'], eye2, radius)
-            else:
-                pygame.draw.rect(self.win, snake.color,
-                                 (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
+            pygame.draw.rect(self.win, snake.color, 
+                             (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
+            if i == 0:  # first cube in body is snake head
+                    
+                tongue_size = SQ_SIZE / 3
+                tongue_pos = SQ_SIZE / 2 - tongue_size / 2
+                eye_size = 4
+
+                x = snake.head.x * SQ_SIZE
+                y = snake.head.y * SQ_SIZE
+
+                eyeh1 = (x + SQ_SIZE * (1 / 3) - eye_size / 3, y + SQ_SIZE / 2)  # horizontal eye
+                eyeh2 = (x + SQ_SIZE * (2 / 3) + eye_size / 3, y + SQ_SIZE / 2)  # horizontal eye
+
+                eyev1 = (x + SQ_SIZE / 2, y + SQ_SIZE * (1 / 3) - eye_size / 3)  # vertical eye
+                eyev2 = (x + SQ_SIZE / 2, y + SQ_SIZE * (2 / 3) + eye_size / 3)  # vertical eye
+                eye1, eye2 = eyeh1, eyeh2
+
+                if snake.dir == (0, 0):  # start
+                    x += tongue_pos
+                    y -= tongue_size - 2
+                elif snake.dir == (0, -1):  # up
+                    x += tongue_pos
+                    y -= tongue_size - 2
+                    eye1, eye2 = eyeh1, eyeh2
+                elif snake.dir == (0, 1):  # down
+                    x += tongue_pos
+                    y += SQ_SIZE - 1
+                    eye1, eye2 = eyeh1, eyeh2
+                elif snake.dir == (-1, 0):  # left
+                    x -= tongue_size - 2
+                    y += tongue_pos
+                    eye1, eye2 = eyev1, eyev2
+                elif snake.dir == (1, 0):  # right
+                    x += SQ_SIZE - 1
+                    y += tongue_pos
+                    eye1, eye2 = eyev1, eyev2
+
+                pygame.draw.circle(self.win, COLORS['BLACK'], eye1, eye_size)
+                pygame.draw.circle(self.win, COLORS['BLACK'], eye2, eye_size)
+
+                tongue = pygame.Rect(x, y, tongue_size, tongue_size)
+                pygame.draw.rect(self.win, COLORS['RED'], tongue)
 
     def draw_snack(self):
         self.win.blit(self.snack.image, (self.snack.x * SQ_SIZE, self.snack.y * SQ_SIZE, SQ_SIZE - 2, SQ_SIZE - 2))
