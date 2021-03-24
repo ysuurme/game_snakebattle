@@ -101,22 +101,30 @@ class Game:
             pygame.event.post(pygame.event.Event(QUIT))
 
         if keys_pressed[pygame.K_LEFT]:  # P1 left
-            self.player1.dir = (-1, 0)
+            if self.player1.dir != (1, 0) or len(self.player1.body) == 1:
+                self.player1.dir = (-1, 0)
         elif keys_pressed[pygame.K_UP]:  # P1 up
-            self.player1.dir = (0, -1)
+            if self.player1.dir != (0, 1) or len(self.player1.body) == 1:
+                self.player1.dir = (0, -1)
         elif keys_pressed[pygame.K_RIGHT]:  # P1 right
-            self.player1.dir = (1, 0)
+            if self.player1.dir != (-1, 0) or len(self.player1.body) == 1:
+                self.player1.dir = (1, 0)
         elif keys_pressed[pygame.K_DOWN]:  # P1 down
-            self.player1.dir = (0, 1)
+            if self.player1.dir != (0, -1) or len(self.player1.body) == 1:
+                self.player1.dir = (0, 1)
 
         if keys_pressed[pygame.K_a]:  # P2 left
-            self.player2.dir = (-1, 0)
+            if self.player2.dir != (1, 0) or len(self.player2.body) == 1:
+                self.player2.dir = (-1, 0)
         elif keys_pressed[pygame.K_w]:  # P2 up
-            self.player2.dir = (0, -1)
+            if self.player2.dir != (0, 1) or len(self.player2.body) == 1:
+                self.player2.dir = (0, -1)
         elif keys_pressed[pygame.K_d]:  # P2 right
-            self.player2.dir = (1, 0)
+            if self.player2.dir != (-1, 0) or len(self.player2.body) == 1:
+                self.player2.dir = (1, 0)
         elif keys_pressed[pygame.K_s]:  # P2 down
-            self.player2.dir = (0, 1)
+            if self.player2.dir != (0, -1) or len(self.player2.body) == 1:
+                self.player2.dir = (0, 1)
 
         if not self.player1.move_snake_body():  # P1 move snake, if can't move P1 hit itself, P2 wins!
             self.winner(self.player2)
