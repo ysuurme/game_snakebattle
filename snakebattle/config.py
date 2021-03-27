@@ -14,7 +14,7 @@ BORDER = pygame.Rect((WIDTH - BORDER_WIDTH) / 2, 0, BORDER_WIDTH, HEIGHT)
 
 # pygame fonts:
 FONT_SCORE = pygame.font.SysFont('comicsans', 40)
-FONT_WINNER = pygame.font.SysFont('comicsans', 75)
+FONT_WINNER = pygame.font.SysFont('comicsans', 60)
 
 # Game colors:
 COLORS = {
