@@ -5,7 +5,7 @@ pygame.mixer.init()
 
 # pygame window:
 SQ_SIZE = 25
-ROWS, COLS = 30, 30
+ROWS, COLS = 25, 25
 WIDTH, HEIGHT = COLS*SQ_SIZE, ROWS*SQ_SIZE
 DELAY = 50  # game delay in ms, hence a higher value is a slower gameplay
 FPS = 10  # game frames per second, hence a higher value is a faster gameplay
@@ -14,7 +14,7 @@ BORDER = pygame.Rect((WIDTH - BORDER_WIDTH) / 2, 0, BORDER_WIDTH, HEIGHT)
 
 # pygame fonts:
 FONT_SCORE = pygame.font.SysFont('comicsans', 40)
-FONT_WINNER = pygame.font.SysFont('comicsans', 75)
+FONT_WINNER = pygame.font.SysFont('comicsans', 60)
 
 # Game colors:
 COLORS = {
@@ -37,3 +37,7 @@ SOUND_HIT = pygame.mixer.Sound('assets/snakeHit.mp3')
 
 # Game events:
 QUIT = pygame.USEREVENT + 1
+
+# Snake colors:
+COLOR_P1 = COLORS["BLUE"]
+COLOR_P2 = COLORS["YELLOW"]

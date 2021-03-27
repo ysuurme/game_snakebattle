@@ -1,4 +1,4 @@
-from snakebattle.config import COLORS, ROWS, COLS
+from snakebattle.config import COLORS, COLOR_P1, COLOR_P2, ROWS, COLS
 
 
 class Snake:
@@ -42,7 +42,7 @@ class Snake:
 class Player1(Snake):
     def __init__(self):
         super().__init__()
-        self.color = COLORS['BLUE']
+        self.color = COLOR_P1
         self.head = Cube(10, 10)
         self.body.append(self.head)
 
@@ -50,7 +50,7 @@ class Player1(Snake):
 class Player2(Snake):
     def __init__(self):
         super().__init__()
-        self.color = COLORS['YELLOW']
+        self.color = COLOR_P2
         self.head = Cube(20, 20)
         self.body.append(self.head)
 
