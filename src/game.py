@@ -47,7 +47,14 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
 
+    def play_step(self, action, on_save_callback=None):
+        self.frame_iteration += 1
+        # 1. Collect User Input
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -276,13 +283,25 @@ class Game:
 
     def winner(self, winner=None):
         winner_text = FONT_WINNER.render("Game completed!", 1, COLORS['WHITE'])
+        
+        # Single Player game over
+        if winner is None and self.mode == "Single":
+            score = self.player1.length
+            winner_text = FONT_WINNER.render(f"Player 1 finished with {score} points!", 1, self.player1.color)
+            self.game_over = True
+            SOUND_HIT.play()
+            self.win.blit(winner_text,
+                          (WIDTH / 2 - winner_text.get_width() / 2, HEIGHT / 2 - winner_text.get_height() / 2))
+            return
+        
         if winner == self.player1:
             winner_text = FONT_WINNER.render("Player 1 has won the game!", 1, self.player1.color)
             self.game_over = True
-        if winner == self.player2:
+        elif winner == self.player2 and self.player2:
             winner_text = FONT_WINNER.render("Player 2 has won the game!", 1, self.player2.color)
             self.game_over = True
 
+        # Check inter-player collisions (PvP only)
         if self.player2:
             for part in self.player2.body:
                 if self.player1.head.x == part.x and self.player1.head.y == part.y:
