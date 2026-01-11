@@ -1,9 +1,3 @@
-import pygame
-
-# Initialize pygame module to access standard constants if needed, 
-# though we try to keep this file data-focused.
-pygame.init() 
-
 # Game Dimensions
 SQ_SIZE = 25
 ROWS = 25
@@ -40,7 +34,3 @@ IMAGE_BACKGROUND_PATH = f"{ASSET_DIR}/snakeBackground.png"
 IMAGE_SNACK_PATH = f"{ASSET_DIR}/snack.png"
 SOUND_MUNCH_PATH = f"{ASSET_DIR}/snakeMunch.mp3"
 SOUND_HIT_PATH = f"{ASSET_DIR}/snakeHit.mp3"
-
-# Events
-# Using a specific ID for custom quit event
-QUIT = pygame.USEREVENT + 1

@@ -9,6 +9,10 @@ from .input_handler import InputHandler
 
 
 class Game:
+    """
+    Responsible for delegating keyboard input processing to the InputHandler and 
+    focuses on updating the simulation of game state.
+    """
     def __init__(self, win):
         self.win = win
         self.game_over = False

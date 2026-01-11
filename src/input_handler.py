@@ -1,6 +1,5 @@
 import pygame
 from typing import Tuple
-from constants import QUIT
 from src.snake import Snake
 
 class InputHandler:
@@ -13,7 +12,7 @@ class InputHandler:
 
         # Global Events
         if keys[pygame.K_ESCAPE]:
-            pygame.event.post(pygame.event.Event(QUIT))
+            pygame.event.post(pygame.event.Event(pygame.QUIT))
 
         # Player 1 Controls (Arrow Keys)
         self._update_direction(player1, keys, 
