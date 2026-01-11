@@ -23,6 +23,7 @@ uv run main.py
 A classic game in a jolly color scheme. This project is inspired by the Object Oriented Programming tutorial of 'Tech with Tim'.
 
 * ["Snake Pygame"](https://www.youtube.com/watch?v=5tvER0MT14s&t=1s) - *Tech With Tim*
+* ["Train an AI to Play Snake"](https://www.youtube.com/watch?v=L8ypSXwyBds) - *Python + PyTorch + Pygame Reinforcement Learning*
 
 🎮 **Controls:**
 The hunt is for a typical Dutch treat "d'n Bossche Bol"
