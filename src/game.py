@@ -48,13 +48,16 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-    def play_step(self, action):
-        self.frame_iteration += 1
-        # 1. Collect User Input
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                if event.key == pygame.K_s and on_save_callback:
+                    on_save_callback()
         
         # 2. Move
         self._move(action) # update head
@@ -223,26 +226,33 @@ class Game:
             self.init_snack()
         return munch
 
-    def is_collision(self, pt=None):
+    def is_collision(self, pt=None, exclude_body=None):
         if pt is None:
             pt = self.player1.head
         # hits boundary
         if pt.x > COLS-1 or pt.x < 0 or pt.y > ROWS-1 or pt.y < 0:
             return True
-        # hits itself
-        for body_part in self.player1.body[1:]:
-            if pt.x == body_part.x and pt.y == body_part.y:
-                return True
+        
+        # Check against Player 1
+        if self.player1:
+             for body_part in self.player1.body:
+                 if exclude_body and body_part == exclude_body: continue
+                 if pt.x == body_part.x and pt.y == body_part.y:
+                     return True
+        
+        # Check against Player 2
+        if self.player2:
+             for body_part in self.player2.body:
+                 if exclude_body and body_part == exclude_body: continue
+                 if pt.x == body_part.x and pt.y == body_part.y:
+                     return True
+        
         return False
 
-    def _move(self, action):
-        # [straight, right, left]
-        
+    def get_move_from_action(self, action, curr_dir):
         clock_wise = [(0, -1), (1, 0), (0, 1), (-1, 0)] # Up, Right, Down, Left
         
-        # Current direction mapping
-        curr_dir = self.player1.dir
-        if curr_dir == (0,0): curr_dir = (1,0) # Default moving right if stationary
+        if curr_dir == (0,0): curr_dir = (1,0) # Default moving right
         
         try:
             idx = clock_wise.index(curr_dir)
@@ -257,7 +267,11 @@ class Game:
         else: # [0, 0, 1]
             next_idx = (idx - 1) % 4
             new_dir = clock_wise[next_idx] # left turn
+            
+        return new_dir
 
+    def _move(self, action):
+        new_dir = self.get_move_from_action(action, self.player1.dir)
         self.player1.dir = new_dir
 
     def winner(self, winner=None):

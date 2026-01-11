@@ -6,9 +6,10 @@ A competitive local multiplayer simulation built with Pygame to apply grid-based
 
 🛠️ **Skills & Learning Overview:** This project served as a practical application of several core software engineering concepts:
 
-*   **Modular Architecture:** The /src or Source folder models complex systems like the Game Loop (`Game`) and Entity Attributes (`Snake`) and (`Snack`) into distinct classes and files. I evolved the game fundamentals with immutable dataclasses for game state and snake coordination.
-*   **Mathematical Game Coordination:** Implements arithmetic logic to map logical grid coordinates (Rows/Cols) to screen positions (X/Y) for accurate rendering of the game.
-*   **Event-Driven Programming:** Manages a real-time game loop to handle user input (mouse clicks) and game events seamlessly.
+*   **Modular Architecture:** The /src or Source folder models complex systems like the Game Loop (`Game`) and Entity Attributes (`Snake`) and (`Snack`) into distinct classes and files. I evolved the game fundamentals with immutable dataclasses for game state and snake coordination. 
+*   **Dynamic Players:** The Game now supports variable player configurations (Single, Player vs Player, Player vs AI Agent).
+*   **AI Infrastructure:** Implemented a Deep Q-Network (DQN) using PyTorch Linear_QNet. Created Trainer and Agent in src/ai to handle the reinforcement learning loop (State -> Action -> Reward -> Train).
+*   **Event-Driven Programming:** Manages a real-time game loop through run() and play_step() to handle user input (keyboard) and AI Agent control
 
 ⚡ **Fast-Track Setup:**
 Get up and running in seconds with `uv`:
@@ -31,6 +32,10 @@ The hunt is for a typical Dutch treat "d'n Bossche Bol"
 | **Player 1** | `↑` | `↓` | `←` | `→` |
 | **Player 2** | `W` | `S` | `A` | `D` |
 
+| Game Modes |
+| :--- |
+| Single Player: Solo practice mode |
+| Player vs Player: Classic WASD vs Arrows |
+| Player vs Agent: Play against your trained AI model! |
+| Agent Training: Watch the AI learn in real-time with live plotting |
 > Press **`ESC`** to quit the game.
-
-*Future aim will be to play against an AI with custom difficulty
