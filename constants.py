@@ -28,6 +28,11 @@ COLOR_P2 = COLORS["YELLOW"]
 P1_START_POS = (10, 10)
 P2_START_POS = (20, 20)
 
+# AI Constants
+MAX_MEMORY = 100_000
+BATCH_SIZE = 1000
+LR = 0.001
+
 # Asset Paths
 ASSET_DIR = "assets"
 IMAGE_BACKGROUND_PATH = f"{ASSET_DIR}/snakeBackground.png"
