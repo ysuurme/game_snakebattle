@@ -1,21 +1,12 @@
-# PyCharm Project folders #
-##########################
-.idea
-/shelf/
-/workspace.xml
-__pycache__
-
-# Git Project folders #
+# Git project folders #
 .git
 
-# UiPath Project folders #
-##########################
-.project
-.local/
-.settings/
+# Workspace specific
+*.code-workspace
 
 # Compiled source #
-###################
+__pycache__
+src\__pycache__
 *.com
 *.class
 *.dll
@@ -24,9 +15,6 @@ __pycache__
 *.so
 
 # Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
 *.7z
 *.dmg
 *.gz
@@ -37,13 +25,11 @@ __pycache__
 *.zip
 
 # Logs and databases #
-######################
 *.log
 *.sql
 *.sqlite
 
 # OS generated files #
-######################
 .DS_Store
 .DS_Store?
 ._*
