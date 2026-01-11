@@ -14,15 +14,34 @@ class InputHandler:
         if keys[pygame.K_ESCAPE]:
             pygame.event.post(pygame.event.Event(pygame.QUIT))
 
-        # Player 1 Controls (Arrow Keys)
-        self._update_direction(player1, keys, 
-                               left=pygame.K_LEFT, right=pygame.K_RIGHT, 
-                               up=pygame.K_UP, down=pygame.K_DOWN)
+        # Player 1 controls (WASD)
+        if keys[pygame.K_a]:
+            if player1.dir != (1, 0):
+                player1.dir = (-1, 0)
+        elif keys[pygame.K_d]:
+            if player1.dir != (-1, 0):
+                player1.dir = (1, 0)
+        elif keys[pygame.K_w]:
+            if player1.dir != (0, 1):
+                player1.dir = (0, -1)
+        elif keys[pygame.K_s]:
+            if player1.dir != (0, -1):
+                player1.dir = (0, 1)
 
-        # Player 2 Controls (WASD)
-        self._update_direction(player2, keys, 
-                               left=pygame.K_a, right=pygame.K_d, 
-                               up=pygame.K_w, down=pygame.K_s)
+        # Player 2 controls (Arrows) - Only if player2 exists
+        if player2:
+            if keys[pygame.K_LEFT]:
+                if player2.dir != (1, 0):
+                    player2.dir = (-1, 0)
+            elif keys[pygame.K_RIGHT]:
+                if player2.dir != (-1, 0):
+                    player2.dir = (1, 0)
+            elif keys[pygame.K_UP]:
+                if player2.dir != (0, 1):
+                    player2.dir = (0, -1)
+            elif keys[pygame.K_DOWN]:
+                if player2.dir != (0, -1):
+                    player2.dir = (0, 1)
 
     def _update_direction(self, snake: Snake, keys, left, right, up, down) -> None:
         """Helper to safely change direction preventing 180-degree turns."""
@@ -44,3 +63,4 @@ class InputHandler:
             opposite_dir = (curr_dir[0] * -1, curr_dir[1] * -1)
             if new_dir != opposite_dir or len(snake.body) <= 1:
                 snake.dir = new_dir
+
