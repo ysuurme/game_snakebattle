@@ -1,8 +1,8 @@
 import pygame
 import sys
 
-from snakebattle.config import QUIT, WIDTH, HEIGHT, DELAY, FPS
-from snakebattle.game import Game
+from constants import QUIT, WIDTH, HEIGHT, DELAY, FPS
+from src.game import Game
 
 
 def init_game():

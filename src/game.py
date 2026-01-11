@@ -1,10 +1,11 @@
 import pygame
 import random
 
-from .config import QUIT, BACKGROUND, COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS, FONT_SCORE, FONT_WINNER,\
-    SOUND_MUNCH, SOUND_HIT
+from constants import COLS, ROWS, WIDTH, HEIGHT, SQ_SIZE, COLORS
+from src.resources import BACKGROUND, FONT_SCORE, FONT_WINNER, SOUND_MUNCH, SOUND_HIT
 from .snake import Player1, Player2
 from .snack import Snack
+from .input_handler import InputHandler
 
 
 class Game:
@@ -14,17 +15,24 @@ class Game:
         self.player1 = None
         self.player2 = None
         self.snack = None
+        self.input_handler = InputHandler()
         self.init_players()
         self.init_snack()
 
     def update(self):
+        # 1. Process Input
+        self.input_handler.handle_input(self.player1, self.player2)
+
+        # 2. Update Logic
+        self.move_snakes()
+        self.handle_snack()
+
+        # 3. Draw Frame
         self.win.blit(BACKGROUND, (0, 0))
         self.draw_game()
         self.draw_snack()
         self.draw_snake(self.player1)
         self.draw_snake(self.player2)
-        self.move_snake()
-        self.handle_snack()
         pygame.display.update()
 
     def init_players(self):
@@ -46,12 +54,10 @@ class Game:
         self.win.blit(p2_score, (WIDTH - p2_score.get_width() - 10, 10))
 
     def draw_snake(self, snake):
-
         for i, cube in enumerate(snake.body):
             pygame.draw.rect(self.win, snake.color, 
                              (cube.x * SQ_SIZE + 1, cube.y * SQ_SIZE + 1, SQ_SIZE - 2, SQ_SIZE - 2))
             if i == 0:  # first cube in body is snake head
-                    
                 tongue_size = SQ_SIZE / 3
                 tongue_pos = SQ_SIZE / 2 - tongue_size / 2
                 eye_size = 4
@@ -95,37 +101,10 @@ class Game:
     def draw_snack(self):
         self.win.blit(self.snack.image, (self.snack.x * SQ_SIZE, self.snack.y * SQ_SIZE, SQ_SIZE - 2, SQ_SIZE - 2))
 
-    def move_snake(self):
-        keys_pressed = pygame.key.get_pressed()
-        if keys_pressed[pygame.K_ESCAPE]:  # Quit game
-            pygame.event.post(pygame.event.Event(QUIT))
-
-        if keys_pressed[pygame.K_LEFT]:  # P1 left
-            if self.player1.dir != (1, 0) or len(self.player1.body) == 1:
-                self.player1.dir = (-1, 0)
-        elif keys_pressed[pygame.K_UP]:  # P1 up
-            if self.player1.dir != (0, 1) or len(self.player1.body) == 1:
-                self.player1.dir = (0, -1)
-        elif keys_pressed[pygame.K_RIGHT]:  # P1 right
-            if self.player1.dir != (-1, 0) or len(self.player1.body) == 1:
-                self.player1.dir = (1, 0)
-        elif keys_pressed[pygame.K_DOWN]:  # P1 down
-            if self.player1.dir != (0, -1) or len(self.player1.body) == 1:
-                self.player1.dir = (0, 1)
-
-        if keys_pressed[pygame.K_a]:  # P2 left
-            if self.player2.dir != (1, 0) or len(self.player2.body) == 1:
-                self.player2.dir = (-1, 0)
-        elif keys_pressed[pygame.K_w]:  # P2 up
-            if self.player2.dir != (0, 1) or len(self.player2.body) == 1:
-                self.player2.dir = (0, -1)
-        elif keys_pressed[pygame.K_d]:  # P2 right
-            if self.player2.dir != (-1, 0) or len(self.player2.body) == 1:
-                self.player2.dir = (1, 0)
-        elif keys_pressed[pygame.K_s]:  # P2 down
-            if self.player2.dir != (0, -1) or len(self.player2.body) == 1:
-                self.player2.dir = (0, 1)
-
+    def move_snakes(self):
+        """Handles snake movement and collision logic."""
+        # Note: Input handling is now done by self.input_handler before this method is called.
+        
         if not self.player1.move_snake_body():  # P1 move snake, if can't move P1 hit itself, P2 wins!
             self.winner(self.player2)
         elif not self.player2.move_snake_body():  # P2 move snake, if can't move P2 hit itself, P1 wins!
